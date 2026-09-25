@@ -16,7 +16,10 @@ public class SolicitudController {
     private SolicitudService service;
 
     @PostMapping
-    public ResponseEntity<Solicitud> crearSolicitud(@RequestBody Solicitud solicitud) {
+    public ResponseEntity<Solicitud> crearSolicitud(@RequestBody Solicitud solicitud, @RequestHeader(value = "X-Usuario", required = false) String usuario) {
+        if (solicitud.getUsuarioSolicitante() == null || solicitud.getUsuarioSolicitante().isEmpty()) {
+            solicitud.setUsuarioSolicitante(usuario);
+        }
         return ResponseEntity.ok(service.crearSolicitud(solicitud));
     }
 
@@ -33,5 +36,13 @@ public class SolicitudController {
     @PatchMapping("/{id}/estado")
     public ResponseEntity<Solicitud> actualizarEstado(@PathVariable Long id, @RequestBody Map<String, String> body) {
         return ResponseEntity.ok(service.actualizarEstado(id, body.get("estado")));
+    }
+
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<String> handleRuntimeException(RuntimeException ex) {
+        if (ex.getMessage().contains("Regla de negocio")) {
+            return ResponseEntity.status(409).body(ex.getMessage());
+        }
+        return ResponseEntity.status(400).body(ex.getMessage());
     }
 }

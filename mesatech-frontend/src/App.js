@@ -49,7 +49,7 @@ function App() {
           <AuthenticatedTemplate>
             <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
               <span className="text-muted" style={{ fontSize: '14px' }}>
-                👋 {accounts.length > 0 ? accounts[0].name : "Usuario"}
+                👋 {accounts.length > 0 ? (accounts[0].name + " (" + accounts[0].username + ")") : "Usuario"}
               </span>
               <button onClick={handleLogout} className="btn btn-danger">
                 Cerrar sesión

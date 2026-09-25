@@ -18,7 +18,10 @@ public class SecurityConfig {
                 .cors(org.springframework.security.config.Customizer.withDefaults())
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authz -> authz
-                        .requestMatchers("/v1/solicitudes/**", "/v2/solicitudes/**").hasAnyRole("CLIENTE", "CLIENT", "OPERADOR", "OPERATOR", "ADMINISTRADOR", "ADMINISTRATOR")
+                        .requestMatchers(org.springframework.http.HttpMethod.GET, "/v1/solicitudes/mias").hasAnyRole("CLIENTE", "CLIENT")
+                        .requestMatchers(org.springframework.http.HttpMethod.POST, "/v1/solicitudes").hasAnyRole("CLIENTE", "CLIENT")
+                        .requestMatchers("/v1/solicitudes/**", "/v2/solicitudes/**").hasAnyRole("OPERADOR", "OPERATOR", "ADMINISTRADOR", "ADMINISTRATOR")
+                        .requestMatchers(org.springframework.http.HttpMethod.GET, "/v1/catalogo/**").hasAnyRole("CLIENTE", "CLIENT", "OPERADOR", "OPERATOR", "ADMINISTRADOR", "ADMINISTRATOR")
                         .requestMatchers("/v1/catalogo/**").hasAnyRole("ADMINISTRADOR", "ADMINISTRATOR")
                         .anyRequest().authenticated())
                 .oauth2ResourceServer(oauth2 -> oauth2

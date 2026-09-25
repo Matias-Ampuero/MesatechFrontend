@@ -29,4 +29,10 @@ public class CatalogoController {
         service.eliminarItem(id);
         return ResponseEntity.ok().build();
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Catalogo> actualizarItem(@PathVariable Long id, @RequestBody Catalogo catalogo) {
+        catalogo.setId(id);
+        return ResponseEntity.ok(service.guardarItem(catalogo));
+    }
 }

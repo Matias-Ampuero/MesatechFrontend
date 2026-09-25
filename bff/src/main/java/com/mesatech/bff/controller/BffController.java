@@ -33,6 +33,18 @@ public class BffController {
         if (request.getHeader("Accept") != null) {
             headers.set("Accept", request.getHeader("Accept"));
         }
+        
+        org.springframework.security.core.Authentication auth = org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null && auth.getPrincipal() instanceof org.springframework.security.oauth2.jwt.Jwt) {
+            org.springframework.security.oauth2.jwt.Jwt jwt = (org.springframework.security.oauth2.jwt.Jwt) auth.getPrincipal();
+            String username = jwt.getClaimAsString("preferred_username");
+            if (username == null) {
+                username = jwt.getClaimAsString("upn"); // Fallback for Entra ID
+            }
+            if (username != null) {
+                headers.set("X-Usuario", username);
+            }
+        }
 
         HttpEntity httpEntity = new HttpEntity<>(body, headers);
         return restTemplate.exchange(url, HttpMethod.valueOf(request.getMethod()), httpEntity, String.class);

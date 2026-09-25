@@ -64,12 +64,12 @@ function App() {
             <Routes>
               <Route path="/" element={<Dashboard />} />
               <Route path="/cliente" element={
-                <ProtectedRoute role="ROLE_CLIENTE">
+                <ProtectedRoute roles={["ROLE_CLIENTE", "ROLE_OPERADOR", "ROLE_ADMINISTRATOR"]}>
                   <ClienteView />
                 </ProtectedRoute>
               } />
               <Route path="/operador" element={
-                <ProtectedRoute role="ROLE_OPERADOR">
+                <ProtectedRoute roles={["ROLE_OPERADOR", "ROLE_ADMINISTRATOR"]}>
                   <OperadorView />
                 </ProtectedRoute>
               } />

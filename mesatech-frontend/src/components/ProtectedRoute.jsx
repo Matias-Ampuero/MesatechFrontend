@@ -4,7 +4,7 @@ import { useMsal } from '@azure/msal-react';
 import { loginRequest } from '../authConfig';
 import { jwtDecode } from 'jwt-decode';
 
-const ProtectedRoute = ({ role, children }) => {
+const ProtectedRoute = ({ role, roles, children }) => {
     const { instance, accounts } = useMsal();
     const [isAuthorized, setIsAuthorized] = useState(null);
 
@@ -20,7 +20,10 @@ const ProtectedRoute = ({ role, children }) => {
                     const decodedToken = jwtDecode(response.accessToken);
                     const userRoles = decodedToken.roles || [];
                     
-                    if (userRoles.includes(role)) {
+                    const allowedRoles = roles || [role];
+                    const hasAccess = allowedRoles.some(r => userRoles.includes(r));
+                    
+                    if (hasAccess) {
                         setIsAuthorized(true);
                     } else {
                         setIsAuthorized(false);

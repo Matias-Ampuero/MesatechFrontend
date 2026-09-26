@@ -38,7 +38,8 @@ const ProtectedRoute = ({ role, roles, children }) => {
         };
 
         checkRole();
-    }, [instance, accounts, role]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [instance, accounts, role, roles]);
 
     if (isAuthorized === null) {
         return <div style={{ padding: '20px', textAlign: 'center', color: 'var(--text-muted)' }}>Verificando permisos...</div>;
